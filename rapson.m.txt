@@ -1,0 +1,52 @@
+% ফাংশন এবং তার ডেরিভেটিভ
+f = @(x) x^2 - 5*x + 2;
+df = @(x) 2*x - 5;
+
+% f= @ (x) 2^x -5*x+2;
+% syms x
+% T = 2^x - 5*x + 2;
+% df_sym=diff(T, x);
+% df=matlabFunction(df_sym);
+% df
+
+% শুরু করার মান এবং সীমা
+a = 1;
+b = 5;
+
+xo = (a + b)/2;   % প্রাথমিক অনুমান
+e = 0.001;        % সংযোজনের tolerance
+n = 10;           % সর্বোচ্চ iteration সংখ্যা
+converge = false;
+x = xo;
+
+% চেক করা যে interval এ root আছে কি না
+if f(a)*f(b) < 0
+    for i = 1:n
+        % ডেরিভেটিভ যদি শূন্য হয়
+        if df(x) == 0
+            error('ডেরিভেটিভ শূন্য। Calculation বন্ধ করতে হবে।');
+        end
+
+        % Newton-Raphson formula
+        x_new = x - f(x)/df(x);
+
+        % convergence চেক
+        if abs(x - x_new) < e
+            x = x_new;       % root update
+            converge = true;
+            break;           % convergence হলে লুপ বন্ধ
+        end
+
+        % পরবর্তী iteration এর জন্য আপডেট
+        x = x_new;
+    end
+else
+    disp('Interval এ root নেই।');
+end
+
+% ফলাফল দেখানো
+if converge
+    fprintf('শেষ root মান: x = %.4f\n', x);
+else
+    disp('সর্বোচ্চ iteration এর মধ্যে convergence হয়নি।');
+end

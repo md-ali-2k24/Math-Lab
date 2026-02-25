@@ -1,0 +1,38 @@
+A = [5 2 1; 1 4 2; 1 2 5];
+b = [12; 15; 20];
+
+if all(abs(diag(A)) > sum(abs(A), 2) - abs(diag(A)) )
+    disp("ok diag");
+else
+    disp("diag");
+
+end
+
+n  = 100;
+e = 0.001;
+
+D = diag(diag(A));
+R = A - D;
+x = zeros(size(b));
+flag = false;
+for i = 1:n
+    new_x = D\ (b - R*x);
+
+    if max(abs(new_x - x)) < e
+        x = new_x;
+        flag =true;
+        fprintf("converged at: %d\n", i)
+        break
+    end
+
+    x = new_x;
+end
+
+if flag
+    disp(x);
+   
+else
+
+    disp("not converged")
+end
+

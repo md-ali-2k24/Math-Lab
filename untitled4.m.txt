@@ -1,0 +1,34 @@
+x = [1891 1901 1911 1921 1931];
+y = [46 66 81 93 101];
+X = 1925;
+n = length(x);
+
+
+D = zeros(n,n);
+D(:,1) = y';     % First column = y values
+
+for j = 2:n
+    for i = n:-1:j
+        D(i,j) = D(i,j-1) - D(i-1,j-1);
+    end
+end
+
+disp('Backward Difference Table:');
+disp(D);
+
+h = x(2) - x(1);
+p = (X - x(n)) / h; % p = (X - x_n) / h
+
+Y = y(n);     % Start with the last y value
+p_term = p;   % Accumulator for the p terms
+
+for k = 1:n-1
+    % Now we simply grab values straight across the last row: D(n, k+1)
+    Y = Y + p_term * D(n, k+1);
+    
+    % Update p for the next iteration: p * (p+1) * (p+2)... / k!
+    p_term = p_term * (p + k) / (k + 1); 
+end
+
+disp(['The interpolated value at X = ', num2str(X), ' is:']);
+disp(Y);

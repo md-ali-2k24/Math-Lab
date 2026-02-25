@@ -1,0 +1,23 @@
+A = input('input cof matrix: ');
+b = input('source: ');
+
+N = length(b);
+x = zeros(size(b));
+
+aug = [A b];
+
+for j = 1:N-1
+    for i = j+1:N
+        m = aug(i, j) / aug(j, j); % lower / upper
+        aug(i, :) = aug(i, :) - m * aug(j, :);
+    end
+end
+
+x(N) = aug(N, N+1) / aug(N, N);
+
+% X = (result − known part) / coefficient
+for k = N-1:-1:1
+    x(k) = (aug(k, N+1) - aug(k, k+1:N) * x(k+1:N)) / aug(k, k);
+end
+
+disp(x)
